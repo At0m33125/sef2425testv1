@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timed Reading Pages</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        #timer {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .bold {
+            font-weight: bold;
+        }
+        #navigation {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div id="timer">Time remaining: <span id="time">00:00</span></div>
+    <div id="content">
+        <h1>Page 1</h1>
+        <p>This is a sample text with some <span class="bold">bold words</span>. You can easily modify this content for each page.</p>
+    </div>
+    <div id="navigation">
+        <button onclick="changePage(2)">Next Page</button>
+    </div>
+
+    <script>
+        let timeLeft = 60; // Set initial time in seconds
+        let timerId;
+
+        function startTimer() {
+            timerId = setInterval(countdown, 1000);
+        }
+
+        function countdown() {
+            if (timeLeft == 0) {
+                clearTimeout(timerId);
+                alert("Time's up!");
+            } else {
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                document.getElementById('time').innerHTML =
+                    (minutes < 10 ? "0" : "") + minutes + ":" +
+                    (seconds < 10 ? "0" : "") + seconds;
+                timeLeft--;
+            }
+        }
+
+        function changePage(pageNumber) {
+            // Reset timer
+            clearTimeout(timerId);
+            timeLeft = 60; // Reset to initial time
+            startTimer();
+
+            // Update content (you would expand this for more pages)
+            let content = document.getElementById('content');
+            if (pageNumber === 2) {
+                content.innerHTML = `
+                    <h1>Page 2</h1>
+                    <p>This is the content for page 2. You can add more <span class="bold">bold text</span> here.</p>
+                `;
+                document.querySelector('#navigation button').onclick = function() { changePage(1); };
+                document.querySelector('#navigation button').textContent = 'Previous Page';
+            } else {
+                content.innerHTML = `
+                    <h1>Page 1</h1>
+                    <p>This is a sample text with some <span class="bold">bold words</span>. You can easily modify this content for each page.</p>
+                `;
+                document.querySelector('#navigation button').onclick = function() { changePage(2); };
+                document.querySelector('#navigation button').textContent = 'Next Page';
+            }
+        }
+
+        // Start the timer when the page loads
+        startTimer();
+    </script>
+</body>
+</html>
